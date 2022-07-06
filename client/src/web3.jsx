@@ -6,36 +6,42 @@ export const Context = createContext();
 
 const ethereum = window.ethereum;
 
-const getEthereumContract = () =>{
-    const provider = new ethers.providers.Web3Provider(ethereum);
-    const signer = provider.getSigner();
-    const transactionContract = new ethers.Contract(contractAddress, contractABI, signer);
-}
-
 export const ContextProvider = ({children}) => {
 
     const [currentAccount, setCurrentAccount] = useState('');
     const [isConnected, setIsConnected] = useState(false);
     const [success, setSuccess] = useState(false);
     const [loading, setLoading] = useState(false);
+    // const [obj, setObj] = useState();
 
-
-    const isWalletConnected = async() => {
-        try {
-            if(!ethereum) alert('No wallet found');
-            const accounts = await ethereum.request({method: 'eth_accounts'});
-            if(accounts.length){
-                setCurrentAccount(accounts[0]);
-                setIsConnected(true);
-            }
-            else{
-                console.log('No accounts found');
-            }
-        } catch (err) {
-            console.error(err);
-            throw new Error('No ethereum Object');
-        }
+    const getEthereumContract = async() =>{
+        const provider = new ethers.providers.Web3Provider(ethereum);
+        const signer = provider.getSigner();
+        const transactionContract = new ethers.Contract(contractAddress, contractABI, signer);
+        // setObj(transactionContract);
+        return transactionContract;
     }
+
+
+    useEffect(()=>{
+        const isWalletConnected = async() => {
+            try {
+                if(!ethereum) return console.warn('No wallet found');
+                const accounts = await ethereum.request({method: 'eth_accounts'});
+                if(accounts.length){
+                    setCurrentAccount(accounts[0]);
+                    setIsConnected(true);
+                }
+                else{
+                    console.log('No accounts found');
+                }
+            } catch (err) {
+                console.error(err);
+                throw new Error('No ethereum Object');
+            }
+        }
+        isWalletConnected();
+    }, [])
 
     const connectWallet = async() => {
         try {
@@ -57,8 +63,10 @@ export const ContextProvider = ({children}) => {
         try {
             if(!ethereum) console.log('No ethereum Object');
             setLoading(true);
-            const transactionContract = getEthereumContract();
+            const obj = await getEthereumContract();
+            // console.log(obj)
             const parsedEtherAmount = ethers.utils.parseEther(amount);
+            // await obj.addToBlockchain(parsedEtherAmount);
             await ethereum.request({
                 method: 'eth_sendTransaction',
                 params: [{
@@ -81,7 +89,6 @@ export const ContextProvider = ({children}) => {
         <Context.Provider value={{
             sendTransaction, 
             connectWallet,
-            isWalletConnected,
             isConnected,
             currentAccount,
             success, setSuccess,

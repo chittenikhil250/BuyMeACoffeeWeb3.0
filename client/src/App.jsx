@@ -10,7 +10,7 @@ import { useContext } from 'react'
 const App = () => {
 
 
-  const {sendTransaction, success, loading, setLoading, setSuccess, isConnected, connectWallet, isWalletConnected, currentAccount} = useContext(Context);
+  const {sendTransaction, success, loading, setLoading, setSuccess, isConnected, connectWallet, currentAccount} = useContext(Context);
 
   const [quantity, setQuantity] = useState(0);
   const [name, setName] = useState('');
@@ -22,7 +22,6 @@ const App = () => {
     setAmount(''+quantity*0.005);
   } ,[quantity]);
 
-  useEffect(()=> isWalletConnected, []);
 
   useEffect(
       () => {
@@ -34,16 +33,17 @@ const App = () => {
   )
   
 
-  const fetchData = async() =>{
-    const blankArray = [];
-    const res = await axios.get(import.meta.env.VITE_API_URL);
-    Object.keys(res.data).map(key => {
-      blankArray.push(res.data[key])
-    })
-    setTippers(blankArray.reverse());
-  }
-
-  useEffect(() => fetchData, [success]);
+  useEffect(() => {
+    const fetchData = async() =>{
+      const blankArray = [];
+      const res = await axios.get(import.meta.env.VITE_apiUrl);
+      Object.keys(res.data).map(key => {
+        blankArray.push(res.data[key])
+      })
+      setTippers(blankArray.reverse());
+    }
+    fetchData();
+  }, [success]);
   
 
   const changeQuantity = (e) =>{
