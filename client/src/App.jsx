@@ -88,7 +88,9 @@ const App = () => {
           src='https://pbs.twimg.com/profile_images/1541853796393193472/TyN3H1zQ_400x400.jpg' 
           // src='https://img.buymeacoffee.com/api/?name=Nikhil&size=900&bg-image=bmc&background=FF813F' 
           alt="Nikhil Chitte" width={220} className='mt-5 pt-3 rounded-circle' />
-        <h2 className="cr-bold mt-2 mb-3">@chitte_nikhil</h2>
+        <h2 className="cr-bold mt-2 mb-3">
+          <a href="https://twitter.com/chitte_nikhil" className='link-dark text-decoration-none'>@chitte_nikhil</a>
+        </h2>
         <span className="supporter"> {tippers.length} supporters </span>
         </center>
       <div className="row mt-4">
@@ -158,7 +160,9 @@ const App = () => {
       <footer className='mt-5 pt-5'>
         <center>
          <span className='bolder cr-bold'> Developed by</span>
-         <h3 className='mt-1 cursive'>Nikhil Chitte</h3>
+         <h3 className='mt-1 cursive'>
+            <a href="#" className='link-dark text-decoration-none'>Nikhil Chitte</a>
+          </h3>
         </center>
       </footer>
 
